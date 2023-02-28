@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Checkbox, Form, Input, Select } from "antd";
+import Button from "./Button";
 // const base_url = process.env.REACT_APP_BASE_URL;
 
 function AddNewPost() {
@@ -27,31 +28,51 @@ function AddNewPost() {
 			});
 			const data = await res.json();
 			console.log(data);
+			setTitle("");
+			setBody("");
+			setTag("");
 		} catch {}
 	};
 	return (
-		<div>
-			<h1>ADD NEW POST</h1>
-			<Form className="">
-				<Form.Item label="Input">
-					<Input value={title} onChange={e => setTitle(e.target.value)} />
+		<div className="flex flex-col justify-center items-center mt-10">
+			<h1 className="text-xl">ADD NEW POST</h1>
+			<Form className="mt-5 w-1/2">
+				<Form.Item>
+					<Input
+						value={title}
+						placeholder="Enter Title"
+						onChange={e => setTitle(e.target.value)}
+					/>
 				</Form.Item>
-				<Form.Item label="Select">
-					<select value={tag} onChange={e => setTag(e.target.value)}>
+				<Form.Item>
+					<select
+						value={tag}
+						placeholder="Tag"
+						onChange={e => setTag(e.target.value)}
+					>
 						<option value="politics">Politics</option>
 						<option value="entertainment">Entertainment</option>
 						<option value="sport">Sport</option>
 					</select>
 				</Form.Item>
-				<Form.Item label="TextArea">
-					<TextArea rows={4} onChange={e => setBody(e.target.value)} />
-				</Form.Item>
 				<Form.Item>
-					<Button onClick={addPost}>Add New Post </Button>
+					<TextArea
+						placeholder="Enter Post"
+						rows={4}
+						onChange={e => setBody(e.target.value)}
+					/>
+				</Form.Item>
+				<Form.Item className="flex justify-center">
+					<Button
+						onClick={addPost}
+						text="Add Post"
+						className="bg-bl text-white py-2 px-5 rounded-md"
+					/>
 				</Form.Item>
 			</Form>
 		</div>
 	);
 }
+// #0182FF
 
 export default AddNewPost;
