@@ -15,6 +15,7 @@ function Login() {
 			password.toLocaleLowerCase() === "admin"
 		) {
 			setError(false);
+			localStorage.setItem("user", username);
 			navigate("/admin/dashboard");
 		} else {
 			console.log("Invalid user");

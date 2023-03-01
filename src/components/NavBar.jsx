@@ -9,6 +9,9 @@ function NavBar() {
 		{ title: "Dashboard", link: "/admin/dashboard" },
 		{ title: "Manage Posts", link: "/admin/manage" },
 	];
+	const handleLogOut = () => {
+		localStorage.removeItem("user");
+	};
 	return (
 		<>
 			<div className="flex justify-between mx-20 mt-5 mb-5">
@@ -21,7 +24,7 @@ function NavBar() {
 							</div>
 						);
 					})}
-					<Button danger>
+					<Button danger onClick={handleLogOut}>
 						<Link to="/admin/login" className="font-lato">
 							Log out
 						</Link>

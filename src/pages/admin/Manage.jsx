@@ -1,19 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import NavBar from "../../components/NavBar";
-// import PostContext from "../../context/postsContext";
+import { checkUser } from "../../services/Authentication";
+import { useNavigate } from "react-router-dom";
 function Manage() {
-	// const { addPostCon, postList, sePostList } = useContext(PostContext);
+	const navigate = useNavigate();
+	const user = localStorage.getItem("user");
 	const [posts, setPosts] = useState();
-	// const posts = localStorage.getItem("posts");
-	// console.log(posts);
-	// const [items, setItems] = useState([]);
-
-	useEffect(() => {
-		const posts = JSON.parse(localStorage.getItem("posts"));
-		if (posts) {
-			setPosts(posts);
-		}
-	}, []);
 	const getPosts = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/posts`, {
@@ -21,16 +13,13 @@ function Manage() {
 				headers: { "Content-Type": "application/json" },
 			});
 			const data = await res.json();
-			localStorage.setItem("posts", JSON.stringify(data));
-			// setPosts(data);
-			// sePostList(data);
-			// console.log(postList);
-			// console.log(data);
+			setPosts(data);
 		} catch (err) {
 			console.log("Something went wrong");
 		}
 	};
 	useEffect(() => {
+		checkUser(user, navigate);
 		getPosts();
 	}, []);
 	return (
