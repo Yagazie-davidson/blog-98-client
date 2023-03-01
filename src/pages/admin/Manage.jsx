@@ -4,6 +4,16 @@ import NavBar from "../../components/NavBar";
 function Manage() {
 	// const { addPostCon, postList, sePostList } = useContext(PostContext);
 	const [posts, setPosts] = useState();
+	// const posts = localStorage.getItem("posts");
+	// console.log(posts);
+	// const [items, setItems] = useState([]);
+
+	useEffect(() => {
+		const posts = JSON.parse(localStorage.getItem("posts"));
+		if (posts) {
+			setPosts(posts);
+		}
+	}, []);
 	const getPosts = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/posts`, {
@@ -11,10 +21,11 @@ function Manage() {
 				headers: { "Content-Type": "application/json" },
 			});
 			const data = await res.json();
-			setPosts(data);
+			localStorage.setItem("posts", JSON.stringify(data));
+			// setPosts(data);
 			// sePostList(data);
 			// console.log(postList);
-			console.log(data);
+			// console.log(data);
 		} catch (err) {
 			console.log("Something went wrong");
 		}
