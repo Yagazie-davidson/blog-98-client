@@ -3,8 +3,10 @@ import NavBar from "../../components/NavBar";
 import { checkUser } from "../../services/Authentication";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
+import { BsPencil } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import { Alert } from "antd";
+import Badge from "../../components/Badge";
 function Manage() {
 	const navigate = useNavigate();
 	const user = localStorage.getItem("user");
@@ -64,12 +66,22 @@ function Manage() {
 					posts.map((post, index) => {
 						return (
 							<div key={index} className="flex justify-between">
-								<h1>{post.postName}</h1>
-								<button onClick={() => deletePost(post.postName)}>
-									<IconContext.Provider value={{ color: "red" }}>
-										<FiTrash2 />
-									</IconContext.Provider>
-								</button>
+								<div>
+									<h1>{post.postName}</h1>
+									<Badge tag={post.tag} />
+								</div>
+								<div className="flex gap-x-5">
+									<button>
+										<IconContext.Provider value={{ color: "green" }}>
+											<BsPencil />
+										</IconContext.Provider>
+									</button>
+									<button onClick={() => deletePost(post.postName)}>
+										<IconContext.Provider value={{ color: "red" }}>
+											<FiTrash2 />
+										</IconContext.Provider>
+									</button>
+								</div>
 							</div>
 						);
 					})}
