@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input, Select } from "antd";
+import { Alert, Form, Input } from "antd";
 import Button from "./Button";
+
 // const base_url = process.env.REACT_APP_BASE_URL;
 
 function AddNewPost() {
@@ -8,16 +9,17 @@ function AddNewPost() {
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [tag, setTag] = useState("");
+	const [success, setSuccess] = useState(false);
 
 	const addPost = async () => {
 		const date = `${new Date().getDate()}-${
 			new Date().getMonth() + 1
 		}-${new Date().getFullYear()}`;
 		const payload = {
-			postName: title,
+			postName: title.toLocaleLowerCase(),
 			body,
-			tag,
-			date,
+			tag: tag.toLocaleLowerCase(),
+			date: date.toLocaleLowerCase(),
 		};
 		console.log(payload);
 		try {
@@ -27,15 +29,21 @@ function AddNewPost() {
 				body: JSON.stringify(payload),
 			});
 			const data = await res.json();
+			setSuccess(true);
 			console.log(data);
 			setTitle("");
 			setBody("");
 			setTag("");
-		} catch {}
+		} catch {
+			setSuccess(false);
+		}
 	};
 	return (
 		<div className="flex flex-col justify-center items-center mt-10">
-			<h1 className="text-xl">ADD NEW POST</h1>
+			<h1 className="text-xl mb-5">ADD NEW POST</h1>
+			{success && (
+				<Alert message="New Post Added successfully" type="success" showIcon />
+			)}
 			<Form className="mt-5 w-1/2">
 				<Form.Item>
 					<Input

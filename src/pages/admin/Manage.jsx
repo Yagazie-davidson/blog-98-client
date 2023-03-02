@@ -4,10 +4,16 @@ import { checkUser } from "../../services/Authentication";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
 import { IconContext } from "react-icons";
+import { Alert } from "antd";
 function Manage() {
 	const navigate = useNavigate();
 	const user = localStorage.getItem("user");
 	const [posts, setPosts] = useState();
+	const [success, setSuccess] = useState(false);
+	useEffect(() => {
+		checkUser(user, navigate);
+	}, []);
+	// get all posts
 	const getPosts = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/posts`, {
@@ -20,23 +26,50 @@ function Manage() {
 			console.log("Something went wrong");
 		}
 	};
+
+	// Delete post function
+	const deletePost = async postName => {
+		try {
+			const res = await fetch("http://localhost:8000/api/admin/post/delete", {
+				method: "delete",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ postName }),
+			});
+			const data = await res.json();
+			setSuccess(true);
+		} catch (err) {
+			console.log(err);
+			setSuccess(false);
+		}
+	};
 	useEffect(() => {
-		checkUser(user, navigate);
 		getPosts();
-	}, []);
+	}, [deletePost]);
 	return (
 		<div>
 			<NavBar />
 			<h1 className="text-center my-10 text-2xl">MANAGE POSTS</h1>
-			<div className="flex flex-col gap-y-10">
+			<div className="flex flex-col gap-y-10 mx-32">
+				<div className="flex justify-center">
+					{success && (
+						<Alert
+							message="Post successfully deleted"
+							type="success"
+							className="w-fit"
+							showIcon
+						/>
+					)}
+				</div>
 				{posts &&
 					posts.map((post, index) => {
 						return (
-							<div key={index} className="flex justify-between mx-32">
+							<div key={index} className="flex justify-between">
 								<h1>{post.postName}</h1>
-								<IconContext.Provider value={{ color: "red" }}>
-									<FiTrash2 />
-								</IconContext.Provider>
+								<button onClick={() => deletePost(post.postName)}>
+									<IconContext.Provider value={{ color: "red" }}>
+										<FiTrash2 />
+									</IconContext.Provider>
+								</button>
 							</div>
 						);
 					})}
