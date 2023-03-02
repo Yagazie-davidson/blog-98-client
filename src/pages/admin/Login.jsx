@@ -35,7 +35,7 @@ function Login() {
 				/>
 			)}
 			<h1 className="text-2xl font-semibold mt-2">LOGIN</h1>
-			<Form className="mt-5 w-1/2">
+			<Form className="mt-5 w-72">
 				<Form.Item>
 					<Input
 						value={username}
